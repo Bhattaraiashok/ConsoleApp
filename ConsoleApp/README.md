@@ -4,301 +4,230 @@ Spreetail demo console app
 
 this is straight forward console application, where it takes user entry of key and value to add to dictionary. 
 
-given use case was:
-		KEYS
-		 ADD foo bar
-		) Added		--- after added immediately KEYS are not listing , so i belive we need user to able to select the options 
-		> ADD baz bang
-		) Added
-		> KEYS    ----PRESS 1 option to see KEYS
-		1) foo
-		2) baz
-
-
-after each transaction, I have added a feature of below option(on top and selection on each transaction) to give user the flexibilty what they want to do next.
-
-What you want to do next?
-        0=ADD
-        1=KEYS
-        2=MEMBERS
-        3=REMOVE
-        4=REMOVEALL
-        5=CLEAR
-        6=KEYEXISTs
-        7=MEMBEREXISTS
-        8=ALLMEMBERS
-        9=ITEMS
-please choose an option from above:
-
-so if you want to ADD enter 0;
-
+command can be in uppercase or lowercase
 EXAMPLE: 
-			What you want to do next?
-			        0=ADD
-			        1=KEYS
-			        2=MEMBERS
-			        3=REMOVE
-			        4=REMOVEALL
-			        5=CLEAR
-			        6=KEYEXISTs
-			        7=MEMBEREXISTS
-			        8=ALLMEMBERS
-			        9=ITEMS
-			please choose an option from above: 0
-			> ADD
+	ADD foo bar
+	or
+	add foo bar
 
-use cases:
+tested use cases:
 
 ============== KEYS ===========================================
-please choose an option from above: 0
-> ADD  foo bar
+> ADD foo bar
 ) Added
 
-please choose an option from above: 0
-> ADD  baz bang
+
+> ADD baz bang
 ) Added
 
-please choose an option from above: 1
+
 > KEYS
 1)foo
 2)baz
 
 ================ MEMBERS =====================================
-please choose an option from above: 0
-> ADD  foo bar
+> ADD foo bar
 ) Added
 
-please choose an option from above: 0
-> ADD  foo baz
+
+> ADD foo baz
 ) Added
 
-please choose an option from above: 2
+
 > MEMBERS foo
 1)bar
 2)baz
 
-please choose an option from above: 2
+
 > MEMBERS bad
 ) ERROR , Key does not exist
 
 ======================== ADD ====================================
-please choose an option from above: 0
-> ADD  foo bar
+> Add foo bar
 ) Added
 
-please choose an option from above: 0
-> ADD  foo baz
+
+> add foo baz
 ) Added
 
-please choose an option from above: 0
-> ADD  foo bar
+
+> add foo bar
 ) ERROR , Member already exist for key
-======================== REMOVE ====================================please choose an option from above: 0
-> ADD  foo bar
+======================== REMOVE ====================================
+> Add foo bar
 ) Added
 
-please choose an option from above: 0
-> ADD  foo baz
+
+> add foo baz
 ) Added
 
-please choose an option from above: 3
-> REMOVE foo bar
+
+> remove foo bar
 Removed
 
-please choose an option from above: 3
-> REMOVE foo bar
+
+> remove foo bar
 ) ERROR, Member does not exist
 
-please choose an option from above: 1
-> KEYS
+
+> keys
 1)foo
 
-please choose an option from above: 3
-> REMOVE foo baz
+
+> remove foo baz
 Removed
 
-please choose an option from above: 1
-> KEYS
+
+> keys
 (empty set)
 
-please choose an option from above: 3
-> REMOVE boom pow
+
+> remove boom pow
 ) ERROR, key does not exist
 
 ======================== REMOVE ALL====================================
-please choose an option from above: 0
-> ADD  foo bar
+> add foo bar
 ) Added
 
 
-please choose an option from above: 0
-> ADD  foo baz
+> add foo baz
 ) Added
 
 
-please choose an option from above: 1
-> KEYS
+> keys
 1)foo
 
 
-please choose an option from above: 4
-> REMOVEALL foo
+> removeall foo
 ) Removed
 
 
-please choose an option from above: 1
-> KEYS
+> keys
 (empty set)
 
 
-please choose an option from above: 4
-> REMOVEALL foo
+> removeall foo
 ) ERROR, key does not exist
 
 ======================== CLEAR ====================================
-please choose an option from above: 0
-> ADD  foo bar
+> add foo bar
 ) Added
 
 
-please choose an option from above: 0
-> ADD  bang zip
+> add bang zip
 ) Added
 
 
-please choose an option from above: 1
-> KEYS
+> keys
 1)foo
 2)bang
 
 
-please choose an option from above: 5
-> CLEAR 
+> clear
 ) Cleared
 (empty set)
 
 
-please choose an option from above: 1
-> KEYS
+> keys
 (empty set)
 
 
-please choose an option from above: 5
-> CLEAR 
+> clear
 ) Cleared
 (empty set)
 
 
-please choose an option from above: 1
-> KEYS
+> keys
 (empty set)
 
 ======================== KEYEXISTS ====================================
-please choose an option from above: 6
 > KEYEXISTS foo
 ) false
 
 
-please choose an option from above: 0
-> ADD  foo bar
+> add foo bar
 ) Added
 
 
-please choose an option from above: 6
-> KEYEXISTS foo
+> keyexists foo
 ) true
 
 ======================== MEMBEREXISTS ====================================
-please choose an option from above: 7
 > MEMBEREXISTS foo bar
 ) false
 
 
-please choose an option from above: 0
-> ADD  foo bar
+> ADD foo bar
 ) Added
 
 
-please choose an option from above: 7
-> MEMBEREXISTS foo bar
+> memberexists foo bar
 ) true
 
 
-please choose an option from above: 7
-> MEMBEREXISTS foo baz
+> memberexists foo baz
 ) false
 
 ======================== ALLMEMBERS ====================================
-please choose an option from above: 8
 > ALLMEMBERS
 (empty set)
 
-please choose an option from above: 0
-> ADD  foo bar
+
+> ADD foo bar
 ) Added
 
 
-please choose an option from above: 0
-> ADD  foo baz
+> ADD foo baz
 ) Added
 
 
-please choose an option from above: 8
 > ALLMEMBERS
- 1)bar
- 2)baz
+1)bar
+2)baz
 
 
-please choose an option from above: 0
-> ADD  bang bar
+> ADD bang bar
 ) Added
 
 
-please choose an option from above: 0
-> ADD  bang baz
+> ADD bang baz
 ) Added
 
 
-please choose an option from above: 8
 > ALLMEMBERS
- 1)bar
- 2)baz
- 3)bar
- 4)baz
+1)bar
+2)baz
+3)bar
+4)baz
 
  ======================== ITEMS ====================================
- please choose an option from above: 9
 > ITEMS
  (empty set)
 
 
-please choose an option from above: 0
-> ADD  foo bar
+> ADD foo bar
 ) Added
 
 
-please choose an option from above: 0
-> ADD  foo baz
+> ADD foo baz
 ) Added
 
 
-please choose an option from above: 9
+> ITEMS
+0) foo: bar
+1) foo: baz
 
- 0) foo: bar
- 1) foo: baz
 
-please choose an option from above: 0
-> ADD  bang bar
+> ADD bang bar
 ) Added
 
 
-please choose an option from above: 0
-> ADD  band baz
+> ADD bang baz
 ) Added
 
-please choose an option from above: 9
 
- 0) foo: bar
- 1) foo: baz
- 2) bang: bar
- 3) band: baz
+> ITEMS
+0) foo: bar
+1) foo: baz
+2) bang: bar
+3) bang: baz

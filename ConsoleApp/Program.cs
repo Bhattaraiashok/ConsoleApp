@@ -6,23 +6,25 @@ namespace ConsoleApp
 {
     public class MyDictionary
     {
-        public string ReadKey { get; set; }
-        public List<string> ReadValue { get; set; }
-        public bool IsError { get; set; }
+        public string Command { get; set; }           // assigns first command what user want to perform
+        public string ReadKey { get; set; }           // assigns keys
+        public List<string> ReadValue { get; set; }   // assigns value
+        public string[] ReadAllCommand { get; set; }  // this will hold all command from screen
+        public string AssignedTo { get; set; }        // this holds whether Key, value or both needed to perform activity
     }
 
     public class OptionsEnum
     {
-        public const string ADD = "0";
-        public const string GetKeys = "1";
-        public const string MEMBERS = "2";
-        public const string REMOVE = "3";
-        public const string REMOVEALL = "4";
-        public const string CLEAR = "5";
-        public const string KEYEXISTS = "6";
-        public const string MEMBEREXISTS = "7";
-        public const string ALLMEMBERS = "8";
-        public const string ITEMS = "9";
+        public const string ADD = "add";
+        public const string KEYS = "keys";
+        public const string MEMBERS = "members";
+        public const string REMOVE = "remove";
+        public const string REMOVEALL = "removeall";
+        public const string CLEAR = "clear";
+        public const string KEYEXISTS = "keyexists";
+        public const string MEMBEREXISTS = "memberexists";
+        public const string ALLMEMBERS = "allmembers";
+        public const string ITEMS = "items";
     }
     public class Program
     {
@@ -32,18 +34,6 @@ namespace ConsoleApp
             Dictionary<string, List<string>> disc = new Dictionary<string, List<string>>();
             try
             {
-                // this is giving an option to user what they want to do next.
-                Console.WriteLine("What you want to do next?");
-                Console.WriteLine("\t0=ADD");
-                Console.WriteLine("\t1=KEYS"); //added this so that it is easy to retrieve only keys
-                Console.WriteLine("\t2=MEMBERS");
-                Console.WriteLine("\t3=REMOVE");
-                Console.WriteLine("\t4=REMOVEALL");
-                Console.WriteLine("\t5=CLEAR");
-                Console.WriteLine("\t6=KEYEXISTS");
-                Console.WriteLine("\t7=MEMBEREXISTS");
-                Console.WriteLine("\t8=ALLMEMBERS");
-                Console.WriteLine("\t9=ITEMS");
                 AskUser(disc);
             }
             catch (ArgumentException ex)
@@ -58,56 +48,52 @@ namespace ConsoleApp
             MyDictionary _dictionary = new MyDictionary();
             _dictionary.ReadValue = new List<string>();
 
-            Console.Write("please choose an option from above: ");
-
-            var userText = Console.ReadLine();
-            switch (userText)
+            Console.Write("> ");
+            _dictionary.ReadAllCommand = Console.ReadLine().Split(new[] { ' ' });
+            if (_dictionary.ReadAllCommand.Count() > 0)
+            {
+                _dictionary.Command = _dictionary.ReadAllCommand[0];
+            }
+            switch (_dictionary.Command.ToLower())
             {
                 case OptionsEnum.ADD:
-                    Console.Write("> ADD  ");
-                    AssignKeyValue("key value", out _dictionary);
-                    if (!_dictionary.IsError)
+                    _dictionary.AssignedTo = "key value";
+                    if (!AssignKeyValue(_dictionary))
                         Add(disc, _dictionary);
                     break;
-                case OptionsEnum.GetKeys:
+                case OptionsEnum.KEYS:
                     GetKeys(disc);
                     break;
                 case OptionsEnum.MEMBERS:
-                    Console.Write("> MEMBERS ");
-                    AssignKeyValue("key", out _dictionary);
-                    if (!_dictionary.IsError)
+                    _dictionary.AssignedTo = "key";
+                    AssignKeyValue(_dictionary);
+                    if (!AssignKeyValue(_dictionary))
                         Members(disc, _dictionary);
                     break;
                 case OptionsEnum.REMOVE:
-                    Console.Write("> REMOVE ");
-                    AssignKeyValue("key value", out _dictionary);
-                    if (!_dictionary.IsError)
+                    _dictionary.AssignedTo = "key value";
+                    if (!AssignKeyValue(_dictionary))
                         Remove(disc, _dictionary);
                     break;
                 case OptionsEnum.REMOVEALL:
-                    Console.Write("> REMOVEALL ");
-                    AssignKeyValue("key", out _dictionary);
-                    if (!_dictionary.IsError)
+                    _dictionary.AssignedTo = "key";
+                    if (!AssignKeyValue(_dictionary))
                         RemoveAll(disc, _dictionary);
                     break;
                 case OptionsEnum.CLEAR:
-                    Console.WriteLine("> CLEAR ");
                     Clear(disc);
                     break;
                 case OptionsEnum.KEYEXISTS:
-                    Console.Write("> KEYEXISTS ");
-                    AssignKeyValue("key", out _dictionary);
-                    if (!_dictionary.IsError)
+                    _dictionary.AssignedTo = "key";
+                    if (!AssignKeyValue(_dictionary))
                         KeyExists(disc, _dictionary);
                     break;
                 case OptionsEnum.MEMBEREXISTS:
-                    Console.Write("> MEMBEREXISTS ");
-                    AssignKeyValue("key value", out _dictionary);
-                    if (!_dictionary.IsError)
+                    _dictionary.AssignedTo = "key value";
+                    if (!AssignKeyValue(_dictionary))
                         MemberExist(disc, _dictionary);
                     break;
                 case OptionsEnum.ALLMEMBERS:
-                    Console.WriteLine("> ALLMEMBERS");
                     ALLMembers(disc);
                     break;
                 case OptionsEnum.ITEMS:
@@ -118,30 +104,29 @@ namespace ConsoleApp
             Console.WriteLine("\n");
             AskUser(disc);
         }
-
-        public static void AssignKeyValue(string assignedTo, out MyDictionary _dictionary)
+        public static bool AssignKeyValue(MyDictionary _dictionary)
         {
-            _dictionary = new MyDictionary();
+            bool isError = false;
             _dictionary.ReadValue = new List<string>();
-            var split = Console.ReadLine().Split(new[] { ' ' });
-            if (assignedTo == "key")
+            var split = _dictionary.ReadAllCommand;
+            if (_dictionary.AssignedTo == "key")
             {
-                _dictionary.ReadKey = split[0];
+                _dictionary.ReadKey = split[1];
             }
             else
             {
-                if (split.Count() > 1)
+                if (split.Count() > 2)
                 {
-                    _dictionary.ReadKey = split[0];
-                    _dictionary.ReadValue.Add(split[1]);
-                    _dictionary.IsError = false;
+                    _dictionary.ReadKey = split[1];
+                    _dictionary.ReadValue.Add(split[2]);
                 }
                 else
                 {
-                    _dictionary.IsError = true;
+                    isError = true;
                     Console.WriteLine("Please enter key and value.");
                 }
             }
+            return isError;
         }
 
         public static void Add(IDictionary<string, List<string>> disc, MyDictionary _dictionary)
@@ -174,7 +159,6 @@ namespace ConsoleApp
 
         public static void GetKeys(Dictionary<string, List<string>> disc)
         {
-            Console.WriteLine("> KEYS ");
             if (disc.Keys != null && disc.Keys.Count > 0)
             {
                 var i = 1;
@@ -351,7 +335,7 @@ namespace ConsoleApp
             }
             else
             {
-                Console.WriteLine("> ITEMS \n {0}", "(empty set)");
+                Console.WriteLine("(empty set)");
             }
         }
     }
