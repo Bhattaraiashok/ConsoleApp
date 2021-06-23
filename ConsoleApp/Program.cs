@@ -111,14 +111,14 @@ namespace ConsoleApp
             var split = _dictionary.ReadAllCommand;
             if (_dictionary.AssignedTo == "key")
             {
-                _dictionary.ReadKey = split[1];
+                _dictionary.ReadKey = split[1].ToLower();
             }
             else
             {
                 if (split.Count() > 2)
                 {
-                    _dictionary.ReadKey = split[1];
-                    _dictionary.ReadValue.Add(split[2]);
+                    _dictionary.ReadKey = split[1].ToLower();
+                    _dictionary.ReadValue.Add(split[2].ToLower());
                 }
                 else
                 {
@@ -137,9 +137,8 @@ namespace ConsoleApp
             {
                 disc.TryGetValue(_dictionary.ReadKey, out listOfValues);
 
-                // check if user enters same/duplicate value for the given key
-                var duplicateMember = listOfValues.Any(x => x.Contains(_dictionary.ReadValue[0]));
-                if (!duplicateMember)
+                var duplicateMember = listOfValues.FindAll(x => x == _dictionary.ReadValue[0]);
+                if (duplicateMember.Count == 0)
                 {
                     listOfValues.Add(_dictionary.ReadValue[0]);
                     disc[_dictionary.ReadKey] = listOfValues;
