@@ -45,7 +45,7 @@ namespace UnitTestProject1
 
             listOfValue = listOfValues.FindAll(x => x == "baz");
 
-            // it should not add two same value twice 
+            // it should add value on same key 
             Assert.AreEqual(listOfValue.Count, 1);
         }
 
